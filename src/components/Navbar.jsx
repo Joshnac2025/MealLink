@@ -1,68 +1,170 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
 
-  const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Donor', path: '/donor' },
-    { name: 'Orphanage', path: '/orphanage' },
-    { name: 'Events', path: '/events' },
-    // Admin link can be hidden or shown based on requirements, keeping it for now
-    { name: 'Admin', path: '/admin' },
-  ];
-
   return (
-    <nav className="navbar" style={{
-      background: 'var(--surface-color)',
-      boxShadow: 'var(--shadow-sm)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 1000
-    }}>
-      <div className="container" style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        height: '70px'
-      }}>
-        <Link to="/" style={{
-          fontSize: '1.5rem',
-          fontWeight: '700',
-          color: 'var(--primary-color)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px'
-        }}>
-          MealLink
-        </Link>
+    <>
+      {/* Top Blue Strip */}
+      <div
+        style={{
+          height: "6px",
+          background: "#d8e6ff",
+        }}
+      ></div>
 
-        {/* Desktop Menu */}
-        <div className="desktop-menu" style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          {navLinks.map((link) => (
+      {/* Navbar */}
+      <nav
+        style={{
+          background: "#fff",
+          borderBottom: "1px solid #eee",
+          position: "sticky",
+          top: 0,
+          zIndex: 1000,
+        }}
+      >
+        <div
+          className="container"
+          style={{
+            maxWidth: "1150px",
+            margin: "0 auto",
+            height: "70px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          {/* Logo */}
+          <Link
+            to="/"
+            style={{
+              fontSize: "28px",
+              fontWeight: "700",
+              color: "#2E7D32",
+              textDecoration: "none",
+            }}
+          >
+            MealLink
+          </Link>
+
+          {/* Center Navigation */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "24px",
+            }}
+          >
             <Link
-              key={link.name}
-              to={link.path}
+              to="/"
               style={{
-                color: isActive(link.path) ? 'var(--primary-color)' : 'var(--text-secondary)',
-                fontWeight: isActive(link.path) ? '600' : '500',
-                padding: '8px 12px',
-                borderRadius: 'var(--radius-sm)',
-                backgroundColor: isActive(link.path) ? '#E8F5E9' : 'transparent',
+                textDecoration: "none",
+                color: "#333",
+                padding: "8px 14px",
+                border: isActive("/")
+                  ? "2px solid #1b5e20"
+                  : "2px solid transparent",
+                borderRadius: "8px",
+                fontWeight: 500,
               }}
             >
-              {link.name}
+              Home
             </Link>
-          ))}
-          <Link to="/login" className="btn btn-primary" style={{ padding: '8px 20px' }}>
-            Login
-          </Link>
+
+            <Link
+              to="/about"
+              style={{
+                textDecoration: "none",
+                color: "#333",
+              }}
+            >
+              About
+            </Link>
+
+            <Link
+              to="/community"
+              style={{
+                textDecoration: "none",
+                color: "#333",
+              }}
+            >
+              Community Meal
+            </Link>
+
+            <Link
+              to="/contact"
+              style={{
+                textDecoration: "none",
+                color: "#333",
+              }}
+            >
+              Contact
+            </Link>
+
+            {/* Language */}
+            <select
+              style={{
+                padding: "8px 12px",
+                borderRadius: "6px",
+                border: "1px solid #ccc",
+                cursor: "pointer",
+              }}
+            >
+              <option>English</option>
+              <option>తెలుగు</option>
+              <option>हिन्दी</option>
+            </select>
+
+            {/* Login */}
+            <Link
+              to="/login"
+              style={{
+                padding: "8px 18px",
+                border: "2px solid #2E7D32",
+                borderRadius: "6px",
+                color: "#2E7D32",
+                textDecoration: "none",
+                fontWeight: 500,
+              }}
+            >
+              Login
+            </Link>
+
+            {/* Register */}
+            <Link
+              to="/register"
+              style={{
+                padding: "8px 18px",
+                border: "2px solid #2E7D32",
+                borderRadius: "6px",
+                color: "#2E7D32",
+                textDecoration: "none",
+                fontWeight: 500,
+              }}
+            >
+              Register
+            </Link>
+
+            {/* Donate */}
+            <Link
+              to="/register"
+              style={{
+                background: "#2E7D32",
+                color: "#fff",
+                padding: "9px 20px",
+                borderRadius: "6px",
+                textDecoration: "none",
+                fontWeight: 600,
+              }}
+            >
+              Donate
+            </Link>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 }

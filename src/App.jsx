@@ -9,6 +9,10 @@ import AdminDashboard from "./pages/AdminDashboard";
 import EventDashboard from "./pages/EventDashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import About from "./pages/About";
+import CommunityMeal from "./pages/CommunityMeal";
+import Contact from "./pages/Contact";
+
 
 export default function App() {
   return (
@@ -17,6 +21,10 @@ export default function App() {
       <main style={{ flex: 1, padding: '20px 0' }}>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/community" element={<CommunityMeal />} />
+          <Route path="/contact" element={<Contact />} />
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/donor" element={<DonorDashboard />} />
@@ -29,3 +37,5 @@ export default function App() {
     </div>
   );
 }
+
+

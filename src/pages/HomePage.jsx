@@ -1,245 +1,343 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
   const [stats, setStats] = useState({
+    donations: 0,
     donors: 0,
     orphanages: 0,
-    donations: 0,
-    mealsServed: 0
   });
-  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Animate on mount
-    setIsVisible(true);
+    const users =
+      JSON.parse(localStorage.getItem("meallink_users")) || [];
+    const donations =
+      JSON.parse(localStorage.getItem("meallink_donations")) || [];
 
-    // Load stats from localStorage
-    const loadStats = () => {
-      try {
-        const users = JSON.parse(localStorage.getItem('meallink_users') || '[]');
-        const donations = JSON.parse(localStorage.getItem('meallink_donations') || '[]');
-
-        const donorCount = users.filter(u => u.role === 'donor').length;
-        const orphanageCount = users.filter(u => u.role === 'orphanage').length;
-        const donationCount = donations.length;
-        const mealsServed = donations.reduce((sum, d) => {
-          const qty = parseInt(d.quantity) || 0;
-          return sum + qty;
-        }, 0);
-
-        setStats({
-          donors: donorCount,
-          orphanages: orphanageCount,
-          donations: donationCount,
-          mealsServed: mealsServed || 500 // Default if no data
-        });
-      } catch (e) {
-        console.error('Error loading stats', e);
-      }
-    };
-
-    loadStats();
-    // Refresh stats every 5 seconds
-    const interval = setInterval(loadStats, 5000);
-    return () => clearInterval(interval);
+    setStats({
+      donations: donations.length,
+      donors: users.filter((u) => u.role === "donor").length,
+      orphanages: users.filter((u) => u.role === "orphanage").length,
+    });
   }, []);
-
-  const features = [
-    {
-      icon: '🍲',
-      title: 'Donate Food',
-      description: 'Restaurants and individuals can donate surplus food easily.',
-      color: '#4CAF50'
-    },
-    {
-      icon: '🏠',
-      title: 'Orphanages Connect',
-      description: 'Orphanages can view and accept donations in real-time.',
-      color: '#2196F3'
-    },
-    {
-      icon: '🎉',
-      title: 'Celebrate',
-      description: 'Sponsor meals for special occasions and spread joy.',
-      color: '#FF9800'
-    }
-  ];
 
   return (
     <div>
+
       {/* Hero Section */}
-      <section style={{
-        background: 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)',
-        padding: '80px 0',
-        textAlign: 'center',
-        marginBottom: '40px',
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-        transition: 'all 0.8s ease-out'
-      }}>
+<section
+  style={{
+    background: "linear-gradient(135deg,#eef9ee,#dff3df)",
+    padding: "90px 20px",
+  }}
+>
+  <div
+    className="container"
+    style={{
+      maxWidth: "1200px",
+      margin: "0 auto",
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      alignItems: "center",
+      gap: "60px",
+    }}
+  >
+    {/* Left Content */}
+    <div>
+      <h1
+        style={{
+          fontSize: "3.7rem",
+          fontWeight: "800",
+          color: "#176b2d",
+          lineHeight: "1.15",
+          marginBottom: "25px",
+        }}
+      >
+        Turning Surplus
+        <br />
+        into Smiles 💚
+      </h1>
+
+      <p
+        style={{
+          fontSize: "1.15rem",
+          color: "#555",
+          lineHeight: "1.8",
+          maxWidth: "500px",
+          marginBottom: "35px",
+        }}
+      >
+        MealLink connects donors, orphanages, and volunteers to rescue
+        surplus food and deliver it to children in need—reducing waste and
+        creating smiles.
+      </p>
+
+      <div style={{ display: "flex", gap: "15px" }}>
+        <button
+          style={{
+            background: "#2E7D32",
+            color: "#fff",
+            border: "none",
+            padding: "14px 28px",
+            borderRadius: "8px",
+            fontSize: "16px",
+            fontWeight: "600",
+            cursor: "pointer",
+          }}
+        >
+          Donate Now
+        </button>
+
+        <button
+          style={{
+            background: "#fff",
+            color: "#2E7D32",
+            border: "2px solid #2E7D32",
+            padding: "14px 28px",
+            borderRadius: "8px",
+            fontSize: "16px",
+            fontWeight: "600",
+            cursor: "pointer",
+          }}
+        >
+          Register
+        </button>
+      </div>
+    </div>
+
+    {/* Right Image */}
+    <div style={{ textAlign: "center" }}>
+      <img
+        src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=900"
+        alt="Children receiving meals"
+        style={{
+          width: "100%",
+          maxWidth: "560px",
+          borderRadius: "20px",
+          boxShadow: "0 15px 40px rgba(0,0,0,0.15)",
+        }}
+      />
+    </div>
+  </div>
+</section>
+
+      {/* How It Works */}
+
+      <section
+        style={{
+          padding: "70px 20px",
+          background: "#f8f9fa",
+        }}
+      >
         <div className="container">
-          <h1 style={{
-            fontSize: '3rem',
-            color: 'var(--primary-dark)',
-            marginBottom: '20px',
-            fontWeight: '800'
-          }}>
-            Making Kindness Accessible
-          </h1>
-          <p style={{
-            fontSize: '1.2rem',
-            color: 'var(--text-secondary)',
-            maxWidth: '600px',
-            margin: '0 auto 40px'
-          }}>
-            Connect surplus food with those in need. Join our mission to eliminate hunger and reduce food waste.
-          </p>
-          <div className="flex justify-center gap-4" style={{ flexWrap: 'wrap' }}>
-            <Link to="/register" className="btn btn-primary" style={{
-              padding: '12px 30px',
-              fontSize: '1.1rem',
-              animation: 'pulse 2s infinite'
-            }}>
-              Start Donating
-            </Link>
-            <Link to="/events" className="btn btn-secondary" style={{ padding: '12px 30px', fontSize: '1.1rem' }}>
-              View Events
-            </Link>
-          </div>
-        </div>
-      </section>
 
-      {/* Features Section */}
-      <section className="container mb-4">
-        <h2 className="text-center mb-4" style={{ color: 'var(--text-primary)' }}>How It Works</h2>
-        <div className="flex gap-4" style={{ flexWrap: 'wrap' }}>
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="card text-center"
-              style={{
-                flex: 1,
-                minWidth: '250px',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                borderTop: `4px solid ${feature.color}`,
-                opacity: isVisible ? 1 : 0,
-                transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
-                transitionDelay: `${index * 0.2}s`
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-10px) scale(1.02)';
-                e.currentTarget.style.boxShadow = '0 15px 30px rgba(0,0,0,0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-              }}
-            >
-              <div style={{ fontSize: '3rem', marginBottom: '10px' }}>{feature.icon}</div>
-              <h3 style={{ color: feature.color }}>{feature.title}</h3>
-              <p style={{ color: 'var(--text-secondary)' }}>{feature.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+          <h2
+            style={{
+              textAlign: "center",
+              marginBottom: "50px",
+              color: "#166534",
+            }}
+          >
+            How It Works
+          </h2>
 
-      {/* Live Stats Section */}
-      <section style={{
-        background: 'linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%)',
-        color: 'white',
-        padding: '60px 0',
-        marginTop: '60px'
-      }}>
-        <div className="container text-center">
-          <h2 className="mb-4">Our Live Impact 📊</h2>
-          <div className="flex justify-between" style={{
-            maxWidth: '900px',
-            margin: '0 auto',
-            flexWrap: 'wrap',
-            gap: '20px'
-          }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns:
+                "repeat(auto-fit,minmax(250px,1fr))",
+              gap: "30px",
+            }}
+          >
             {[
-              { label: 'Meals Served', value: stats.mealsServed, icon: '🍽️' },
-              { label: 'Donations', value: stats.donations, icon: '📦' },
-              { label: 'Donors', value: stats.donors, icon: '❤️' },
-              { label: 'Orphanages', value: stats.orphanages, icon: '🏠' }
-            ].map((stat, index) => (
+              {
+                icon: "🍲",
+                title: "Donate Food",
+                text:
+                  "Restaurants and individuals can donate surplus food easily.",
+              },
+              {
+                icon: "🏠",
+                title: "Orphanages Connect",
+                text:
+                  "Orphanages can view and accept donations in real-time.",
+              },
+              {
+                icon: "🎉",
+                title: "Celebrate",
+                text:
+                  "Sponsor meals for special occasions and spread joy.",
+              },
+            ].map((item, index) => (
               <div
                 key={index}
+                className="card"
                 style={{
-                  flex: '1 1 200px',
-                  padding: '20px',
-                  background: 'rgba(255,255,255,0.1)',
-                  borderRadius: '12px',
-                  backdropFilter: 'blur(10px)',
-                  transition: 'all 0.3s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
-                  e.currentTarget.style.transform = 'scale(1.05)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                  e.currentTarget.style.transform = 'scale(1)';
+                  padding: "35px",
+                  textAlign: "center",
+                  borderRadius: "15px",
                 }}
               >
-                <div style={{ fontSize: '2rem', marginBottom: '10px' }}>{stat.icon}</div>
-                <div style={{
-                  fontSize: '2.5rem',
-                  fontWeight: 'bold',
-                  marginBottom: '5px'
-                }}>
-                  {stat.value}+
-                </div>
-                <div style={{ fontSize: '1rem', opacity: 0.9 }}>{stat.label}</div>
+                <div style={{ fontSize: "45px" }}>{item.icon}</div>
+
+                <h4
+                  style={{
+                    marginTop: "20px",
+                    color: "#166534",
+                  }}
+                >
+                  {item.title}
+                </h4>
+
+                <p style={{ color: "#666" }}>
+                  {item.text}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="container" style={{
-        textAlign: 'center',
-        padding: '60px 0'
-      }}>
-        <h2 style={{ marginBottom: '20px', color: 'var(--primary-dark)' }}>
-          Ready to Make a Difference?
-        </h2>
-        <p style={{
-          fontSize: '1.1rem',
-          color: 'var(--text-secondary)',
-          marginBottom: '30px',
-          maxWidth: '600px',
-          margin: '0 auto 30px'
-        }}>
-          Join thousands of donors and organizations making an impact every day.
-        </p>
-        <Link
-          to="/register"
-          className="btn btn-primary"
-          style={{
-            padding: '15px 40px',
-            fontSize: '1.2rem',
-            boxShadow: '0 4px 15px rgba(46, 125, 50, 0.3)'
-          }}
-        >
-          Get Started Now →
-        </Link>
+      {/* Why Choose */}
+
+      <section
+        style={{
+          padding: "80px 20px",
+        }}
+      >
+        <div className="container">
+
+          <h2
+            style={{
+              textAlign: "center",
+              color: "#166534",
+            }}
+          >
+            Why Choose MealLink?
+          </h2>
+
+          <p
+            style={{
+              textAlign: "center",
+              color: "#666",
+              maxWidth: "700px",
+              margin: "20px auto 50px",
+            }}
+          >
+            We make food donation simple, transparent and impactful by
+            connecting donors, orphanages and volunteers on one trusted
+            platform.
+          </p>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns:
+                "repeat(auto-fit,minmax(220px,1fr))",
+              gap: "25px",
+            }}
+          >
+            {[
+              {
+                icon: "🌱",
+                title: "Reduce Food Waste",
+                text:
+                  "Save perfectly good surplus food from going to waste.",
+              },
+              {
+                icon: "❤️",
+                title: "Feed Children",
+                text:
+                  "Ensure nutritious meals reach children in need.",
+              },
+              {
+                icon: "🤝",
+                title: "Trusted Community",
+                text:
+                  "Verified donors, orphanages and volunteers working together.",
+              },
+              {
+                icon: "⚡",
+                title: "Fast & Easy",
+                text:
+                  "Donate or accept food in just a few clicks.",
+              },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="card"
+                style={{
+                  padding: "30px",
+                  textAlign: "center",
+                }}
+              >
+                <div style={{ fontSize: "40px" }}>{item.icon}</div>
+
+                <h4
+                  style={{
+                    marginTop: "15px",
+                    color: "#166534",
+                  }}
+                >
+                  {item.title}
+                </h4>
+
+                <p style={{ color: "#666" }}>
+                  {item.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
-      <style>{`
-        @keyframes pulse {
-          0%, 100% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.05);
-          }
-        }
-      `}</style>
+      {/* Impact */}
+
+      <section
+        style={{
+          background: "#166534",
+          color: "white",
+          padding: "70px 20px",
+        }}
+      >
+        <div className="container">
+
+          <h2
+            style={{
+              textAlign: "center",
+              marginBottom: "50px",
+            }}
+          >
+            Our Impact
+          </h2>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns:
+                "repeat(auto-fit,minmax(220px,1fr))",
+              gap: "30px",
+              textAlign: "center",
+            }}
+          >
+            <div>
+              <h1>{stats.donations}+</h1>
+              <p>Donations Made</p>
+            </div>
+
+            <div>
+              <h1>{stats.donors}+</h1>
+              <p>Total Donors</p>
+            </div>
+
+            <div>
+              <h1>{stats.orphanages}+</h1>
+              <p>Registered Orphanages</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
