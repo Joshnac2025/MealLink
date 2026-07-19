@@ -1,343 +1,187 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import heroImage from "../assets/hero-image.png";
 
 export default function HomePage() {
+  const { t } = useTranslation();
   const [stats, setStats] = useState({
-    donations: 0,
-    donors: 0,
-    orphanages: 0,
+    totalDonors: 0,
+    totalOrphanages: 0,
+    totalDonations: 0
   });
 
   useEffect(() => {
-    const users =
-      JSON.parse(localStorage.getItem("meallink_users")) || [];
-    const donations =
-      JSON.parse(localStorage.getItem("meallink_donations")) || [];
+    // Fetch real-time stats from localStorage
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+
+    const donors = users.filter(u => u.userType === 'donor').length;
+    const orphanages = users.filter(u => u.userType === 'orphanage').length;
+    const donationsCount = donations.length;
 
     setStats({
-      donations: donations.length,
-      donors: users.filter((u) => u.role === "donor").length,
-      orphanages: users.filter((u) => u.role === "orphanage").length,
+      totalDonors: donors,
+      totalOrphanages: orphanages,
+      totalDonations: donationsCount
     });
   }, []);
 
   return (
     <div>
-
       {/* Hero Section */}
-<section
-  style={{
-    background: "linear-gradient(135deg,#eef9ee,#dff3df)",
-    padding: "90px 20px",
-  }}
->
-  <div
-    className="container"
-    style={{
-      maxWidth: "1200px",
-      margin: "0 auto",
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      alignItems: "center",
-      gap: "60px",
-    }}
-  >
-    {/* Left Content */}
-    <div>
-      <h1
-        style={{
-          fontSize: "3.7rem",
-          fontWeight: "800",
-          color: "#176b2d",
-          lineHeight: "1.15",
-          marginBottom: "25px",
-        }}
-      >
-        Turning Surplus
-        <br />
-        into Smiles 💚
+   <section className="hero">
+ <div className="container hero-container">
+
+    <div className="hero-text">
+      <h1>
+        Turning Surplus <br />
+        into <span>Smiles 💚</span>
       </h1>
 
-      <p
-        style={{
-          fontSize: "1.15rem",
-          color: "#555",
-          lineHeight: "1.8",
-          maxWidth: "500px",
-          marginBottom: "35px",
-        }}
-      >
-        MealLink connects donors, orphanages, and volunteers to rescue
-        surplus food and deliver it to children in need—reducing waste and
-        creating smiles.
+      <p>
+        MealLink connects donors, orphanages and volunteers to reduce food
+        waste and ensure every surplus meal reaches children in need.
       </p>
 
-      <div style={{ display: "flex", gap: "15px" }}>
-        <button
-          style={{
-            background: "#2E7D32",
-            color: "#fff",
-            border: "none",
-            padding: "14px 28px",
-            borderRadius: "8px",
-            fontSize: "16px",
-            fontWeight: "600",
-            cursor: "pointer",
-          }}
-        >
+<div className="hero-buttons">
+        <Link to="/register" className="btn btn-primary">
           Donate Now
-        </button>
+        </Link>
 
-        <button
-          style={{
-            background: "#fff",
-            color: "#2E7D32",
-            border: "2px solid #2E7D32",
-            padding: "14px 28px",
-            borderRadius: "8px",
-            fontSize: "16px",
-            fontWeight: "600",
-            cursor: "pointer",
-          }}
-        >
+        <Link to="/register" className="btn btn-outline">
           Register
-        </button>
+        </Link>
       </div>
     </div>
 
-    {/* Right Image */}
-    <div style={{ textAlign: "center" }}>
-      <img
-        src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=900"
-        alt="Children receiving meals"
-        style={{
-          width: "100%",
-          maxWidth: "560px",
-          borderRadius: "20px",
-          boxShadow: "0 15px 40px rgba(0,0,0,0.15)",
-        }}
-      />
+    <div className="hero-image">
+
+    <img
+  src={heroImage}
+  alt="MealLink Hero"
+  style={{
+    width: "100%",
+    maxWidth: "500px",
+    borderRadius: "12px"
+  }}
+/>
+    </div>
+
+  </div>   {/* <-- ADD THIS MISSING DIV */}
+</section>
+      
+      {/* Features Section */}
+      <section className="container mb-4">
+        <h2 className="text-center mb-4" style={{ color: 'var(--text-primary)' }}>How It Works</h2>
+        <div
+  className="flex"
+  style={{
+    flexWrap: "wrap",
+    gap: "30px",
+    justifyContent: "center"
+  }}
+>
+          <div className="card text-center" style={{ flex: 1, minWidth: '250px' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🍲</div>
+            <h3>Donate Food</h3>
+            <p style={{ color: 'var(--text-secondary)' }}>Restaurants and individuals can donate surplus food easily.</p>
+          </div>
+          <div className="card text-center" style={{ flex: 1, minWidth: '250px' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🏠</div>
+            <h3>Orphanages Connect</h3>
+            <p style={{ color: 'var(--text-secondary)' }}>Orphanages can view and accept donations in real-time.</p>
+          </div>
+          <div className="card text-center" style={{ flex: 1, minWidth: '250px' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🎉</div>
+            <h3>Celebrate</h3>
+            <p style={{ color: 'var(--text-secondary)' }}>Sponsor meals for special occasions and spread joy.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose MealLink */}
+<section className="why-section">
+  <div className="container">
+    <h2 className="text-center">Why Choose MealLink?</h2>
+
+    <p
+      className="text-center"
+      style={{
+        maxWidth: "700px",
+        margin: "15px auto 50px",
+        color: "var(--text-secondary)"
+      }}
+    >
+      We make food donation simple, transparent, and impactful by connecting
+      donors, orphanages, and volunteers on one trusted platform.
+    </p>
+
+    <div className="why-grid">
+
+      <div className="card text-center">
+        <div style={{ fontSize: "3rem" }}>🌱</div>
+        <h3>Reduce Food Waste</h3>
+        <p>
+          Save perfectly good surplus food from going to waste.
+        </p>
+      </div>
+
+      <div className="card text-center">
+        <div style={{ fontSize: "3rem" }}>❤️</div>
+        <h3>Feed Children</h3>
+        <p>
+          Ensure nutritious meals reach children in need.
+        </p>
+      </div>
+
+      <div className="card text-center">
+        <div style={{ fontSize: "3rem" }}>🤝</div>
+        <h3>Trusted Community</h3>
+        <p>
+          Verified donors, orphanages, and volunteers working together.
+        </p>
+      </div>
+
+      <div className="card text-center">
+        <div style={{ fontSize: "3rem" }}>⚡</div>
+        <h3>Fast & Easy</h3>
+        <p>
+          Donate or accept food in just a few clicks.
+        </p>
+      </div>
+
     </div>
   </div>
 </section>
 
-      {/* How It Works */}
-
-      <section
-        style={{
-          padding: "70px 20px",
-          background: "#f8f9fa",
-        }}
-      >
-        <div className="container">
-
-          <h2
-            style={{
-              textAlign: "center",
-              marginBottom: "50px",
-              color: "#166534",
-            }}
-          >
-            How It Works
-          </h2>
-
+      {/* Stats Section - Real-time from localStorage */}
+      <section style={{ background: 'var(--primary-dark)', color: 'white', padding: '60px 0', marginTop: '60px' }}>
+        <div className="container text-center">
+          <h2 className="mb-4">Our Impact</h2>
           <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit,minmax(250px,1fr))",
-              gap: "30px",
-            }}
-          >
-            {[
-              {
-                icon: "🍲",
-                title: "Donate Food",
-                text:
-                  "Restaurants and individuals can donate surplus food easily.",
-              },
-              {
-                icon: "🏠",
-                title: "Orphanages Connect",
-                text:
-                  "Orphanages can view and accept donations in real-time.",
-              },
-              {
-                icon: "🎉",
-                title: "Celebrate",
-                text:
-                  "Sponsor meals for special occasions and spread joy.",
-              },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="card"
-                style={{
-                  padding: "35px",
-                  textAlign: "center",
-                  borderRadius: "15px",
-                }}
-              >
-                <div style={{ fontSize: "45px" }}>{item.icon}</div>
-
-                <h4
-                  style={{
-                    marginTop: "20px",
-                    color: "#166534",
-                  }}
-                >
-                  {item.title}
-                </h4>
-
-                <p style={{ color: "#666" }}>
-                  {item.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose */}
-
-      <section
-        style={{
-          padding: "80px 20px",
-        }}
-      >
-        <div className="container">
-
-          <h2
-            style={{
-              textAlign: "center",
-              color: "#166534",
-            }}
-          >
-            Why Choose MealLink?
-          </h2>
-
-          <p
-            style={{
-              textAlign: "center",
-              color: "#666",
-              maxWidth: "700px",
-              margin: "20px auto 50px",
-            }}
-          >
-            We make food donation simple, transparent and impactful by
-            connecting donors, orphanages and volunteers on one trusted
-            platform.
-          </p>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit,minmax(220px,1fr))",
-              gap: "25px",
-            }}
-          >
-            {[
-              {
-                icon: "🌱",
-                title: "Reduce Food Waste",
-                text:
-                  "Save perfectly good surplus food from going to waste.",
-              },
-              {
-                icon: "❤️",
-                title: "Feed Children",
-                text:
-                  "Ensure nutritious meals reach children in need.",
-              },
-              {
-                icon: "🤝",
-                title: "Trusted Community",
-                text:
-                  "Verified donors, orphanages and volunteers working together.",
-              },
-              {
-                icon: "⚡",
-                title: "Fast & Easy",
-                text:
-                  "Donate or accept food in just a few clicks.",
-              },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="card"
-                style={{
-                  padding: "30px",
-                  textAlign: "center",
-                }}
-              >
-                <div style={{ fontSize: "40px" }}>{item.icon}</div>
-
-                <h4
-                  style={{
-                    marginTop: "15px",
-                    color: "#166534",
-                  }}
-                >
-                  {item.title}
-                </h4>
-
-                <p style={{ color: "#666" }}>
-                  {item.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Impact */}
-
-      <section
-        style={{
-          background: "#166534",
-          color: "white",
-          padding: "70px 20px",
-        }}
-      >
-        <div className="container">
-
-          <h2
-            style={{
-              textAlign: "center",
-              marginBottom: "50px",
-            }}
-          >
-            Our Impact
-          </h2>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit,minmax(220px,1fr))",
-              gap: "30px",
-              textAlign: "center",
-            }}
-          >
+  className="flex justify-between"
+  style={{
+    maxWidth: "900px",
+    margin: "0 auto",
+    gap: "40px"
+  }}
+>
             <div>
-              <h1>{stats.donations}+</h1>
-              <p>Donations Made</p>
+              <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.totalDonations}+</div>
+              <div>Donations Made</div>
             </div>
-
             <div>
-              <h1>{stats.donors}+</h1>
-              <p>Total Donors</p>
+              <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.totalDonors}+</div>
+              <div>{t('admin.totalDonors')}</div>
             </div>
-
             <div>
-              <h1>{stats.orphanages}+</h1>
-              <p>Registered Orphanages</p>
+              <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.totalOrphanages}+</div>
+              <div>{t('admin.registeredOrphanages')}</div>
             </div>
           </div>
         </div>
       </section>
-
     </div>
   );
 }

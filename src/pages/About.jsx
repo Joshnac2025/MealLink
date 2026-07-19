@@ -9,22 +9,15 @@ export default function About() {
       <section
         style={{
           background: "linear-gradient(135deg,#eef9ee,#dff3df)",
-          padding: "90px 20px",
+          padding: "80px 20px",
           textAlign: "center",
         }}
       >
-        <div
-          className="container"
-          style={{
-            maxWidth: "900px",
-            margin: "0 auto",
-          }}
-        >
+        <div className="container">
           <h1
             style={{
-              fontSize: "3.5rem",
-              color: "#176B2D",
-              fontWeight: "700",
+              fontSize: "3rem",
+              color: "var(--primary-dark)",
               marginBottom: "20px",
             }}
           >
@@ -33,9 +26,10 @@ export default function About() {
 
           <p
             style={{
-              color: "#555",
+              maxWidth: "750px",
+              margin: "0 auto",
+              color: "var(--text-secondary)",
               fontSize: "1.1rem",
-              lineHeight: "1.8",
             }}
           >
             MealLink is dedicated to reducing food waste by connecting generous
@@ -45,52 +39,25 @@ export default function About() {
       </section>
 
       {/* Mission & Vision */}
-      <section
-        className="container"
-        style={{
-          padding: "70px 20px",
-        }}
-      >
+      <section className="container" style={{ padding: "40px 0 20px" }}>
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
-            gap: "25px",
+            gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
+            gap: "30px",
           }}
         >
-          <div
-            style={{
-              background: "#fff",
-              padding: "30px",
-              borderRadius: "16px",
-              boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
-              transition: ".3s",
-            }}
-          >
-            <h2 style={{ color: "#176B2D", marginBottom: "18px" }}>
-              🌍 Our Mission
-            </h2>
-
-            <p style={{ color: "#555", lineHeight: "1.8" }}>
+          <div className="card">
+            <h2>🌍 Our Mission</h2>
+            <p style={{ marginTop: "15px", color: "var(--text-secondary)" }}>
               To reduce food waste while ensuring every child receives nutritious
               meals through technology and community support.
             </p>
           </div>
 
-          <div
-            style={{
-              background: "#fff",
-              padding: "30px",
-              borderRadius: "16px",
-              boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
-              transition: ".3s",
-            }}
-          >
-            <h2 style={{ color: "#176B2D", marginBottom: "18px" }}>
-              🎯 Our Vision
-            </h2>
-
-            <p style={{ color: "#555", lineHeight: "1.8" }}>
+          <div className="card">
+            <h2>🎯 Our Vision</h2>
+            <p style={{ marginTop: "15px", color: "var(--text-secondary)" }}>
               A world where no food goes to waste and no child sleeps hungry.
             </p>
           </div>
@@ -98,237 +65,195 @@ export default function About() {
       </section>
 
       {/* Our Story */}
-      <section
-        style={{
-          padding: "20px 20px 80px",
-          textAlign: "center",
-        }}
-      >
-        <div
-          className="container"
-          style={{
-            maxWidth: "850px",
-            margin: "0 auto",
-          }}
-        >
-          <h2
-            style={{
-              fontSize: "2.3rem",
-              color: "#176B2D",
-            }}
-          >
-            Our Story
-          </h2>
+<section
+  className="bg-white"
+  style={{
+    paddingTop: "5px",
+    paddingBottom: "25px",
+    paddingLeft: "20px",
+    paddingRight: "20px",
+  }}
+>
+  <div
+  style={{
+    maxWidth: "800px",
+    margin: "0 auto",
+    textAlign: "center",
+    padding: "0 20px",
+  }}
+>
+    <h2
+  style={{
+    color: "var(--primary-dark)",
+    fontSize: "2rem",
+    fontWeight: "700",
+    marginBottom: "25px",
+  }}
+>
+  Our Story
+</h2>
 
-          <div
-            style={{
-              width: "70px",
-              height: "4px",
-              background: "#2E7D32",
-              margin: "15px auto 35px",
-              borderRadius: "30px",
-            }}
-          />
+<div
+  style={{
+    width: "70px",
+    height: "4px",
+    background: "var(--primary-dark)",
+    margin: "0 auto 22px",
+    borderRadius: "999px",
+  }}
+></div>
+    
+    <p
+  style={{
+    fontSize: "1.15rem",
+    lineHeight: "1.9",
+    color: "var(--text-secondary)",
+  }}
+>
+  Every day, perfectly good food goes to waste while many children
+  struggle to access nutritious meals.
+</p>
+    
+      <p
+  style={{
+    marginTop: "15px",
+    fontSize: "1.15rem",
+    lineHeight: "1.9",
+    color: "var(--text-secondary)",
+  }}
+>
+  MealLink was created to bridge this gap by connecting food donors,
+  orphanages, and volunteers through one simple, transparent, and
+  reliable platform.
+</p>
 
-          <p
-            style={{
-              color: "#555",
-              lineHeight: "2",
-              fontSize: "1.08rem",
-              marginBottom: "25px",
-            }}
-          >
-            Every day, perfectly good food goes to waste while many children
-            struggle to access nutritious meals.
-          </p>
+  </div>
+</section>
 
-          <p
-            style={{
-              color: "#555",
-              lineHeight: "2",
-              fontSize: "1.08rem",
-            }}
-          >
-            MealLink was created to bridge this gap by connecting food donors,
-            orphanages, and volunteers through one simple, transparent, and
-            reliable platform. Together, we transform surplus food into hope,
-            smiles, and healthier futures.
-          </p>
-        </div>
-      </section>
 
-      {/* Our Impact */}
-      <section
-        className="container"
-        style={{
-          paddingBottom: "80px",
-        }}
-      >
-        <h2
-          style={{
-            textAlign: "center",
-            color: "#176B2D",
-            marginBottom: "15px",
-            fontSize: "2.3rem",
-          }}
-        >
-          Our Impact
-        </h2>
+{/* Our Impact */}
+<section
+  className="bg-gray-50"
+  style={{
+    padding: "5px 20px 30px",
+  }}
+>
+  <div className="container">
 
-        <div
-          style={{
-            width: "70px",
-            height: "4px",
-            background: "#2E7D32",
-            margin: "0 auto 45px",
-            borderRadius: "30px",
-          }}
-        />
+    <h2
+      style={{
+        textAlign: "center",
+        color: "var(--primary-dark)",
+        marginBottom: "30px",
+        fontSize: "1.8rem",
+        fontWeight: "700",
+      }}
+    >
+      Our Impact
+    </h2>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
-            gap: "25px",
-          }}
-        >
-          {[
-            {
-              icon: "🍽️",
-              value: "1000+",
-              label: "Meals Shared",
-            },
-            {
-              icon: "❤️",
-              value: "500+",
-              label: "Children Supported",
-            },
-            {
-              icon: "🏠",
-              value: "40+",
-              label: "Partner Orphanages",
-            },
-            {
-              icon: "🤝",
-              value: "150+",
-              label: "Registered Donors",
-            },
-          ].map((item, index) => (
-            <div
-              key={index}
-              style={{
-                background: "#fff",
-                padding: "35px",
-                textAlign: "center",
-                borderRadius: "16px",
-                boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
-                transition: ".3s",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "2.5rem",
-                  marginBottom: "15px",
-                }}
-              >
-                {item.icon}
-              </div>
+    <div className="impact-grid">
 
-              <h2
-                style={{
-                  color: "#2E7D32",
-                  fontSize: "2rem",
-                }}
-              >
-                {item.value}
-              </h2>
+      <div className="card">
+        <h2>1000+</h2>
+        <p>Meals Shared</p>
+      </div>
 
-              <p
-                style={{
-                  color: "#666",
-                }}
-              >
-                {item.label}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <div className="card">
+        <h2>500+</h2>
+        <p>Children Supported</p>
+      </div>
 
-      {/* CTA */}
-      <section
-        style={{
-          background: "#1B5E20",
-          padding: "90px 20px",
-          textAlign: "center",
-          color: "#fff",
-        }}
-      >
-        <div
-          className="container"
-          style={{
-            maxWidth: "800px",
-          }}
-        >
-          <h2
-            style={{
-              fontSize: "3rem",
-              marginBottom: "20px",
-            }}
-          >
-            Ready to Make a Difference?
-          </h2>
+      <div className="card">
+        <h2>40+</h2>
+        <p>Partner Orphanages</p>
+      </div>
 
-          <p
-            style={{
-              marginBottom: "40px",
-              lineHeight: "1.8",
-              fontSize: "1.1rem",
-            }}
-          >
-            Join MealLink today and help reduce food waste while bringing smiles
-            to children in need.
-          </p>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "20px",
-              flexWrap: "wrap",
-            }}
-          >
-            <Link
-              to="/register"
-              style={{
-                background: "#fff",
-                color: "#2E7D32",
-                padding: "14px 30px",
-                borderRadius: "8px",
-                textDecoration: "none",
-                fontWeight: "600",
-              }}
-            >
-              Register
-            </Link>
-
-            <Link
-              to="/donor"
-              style={{
-                border: "2px solid white",
-                color: "#fff",
-                padding: "14px 30px",
-                borderRadius: "8px",
-                textDecoration: "none",
-                fontWeight: "600",
-              }}
-            >
-              Donate Now
-            </Link>
-          </div>
-        </div>
-      </section>
+      <div className="card">
+        <h2>150+</h2>
+        <p>Registered Donors</p>
+      </div>
 
     </div>
+
+  </div>
+</section>
+
+{/* Call to Action */}
+<section
+  style={{
+    marginTop: "0px",
+    background: "var(--primary-dark)",
+    color: "white",
+    padding: "70px 20px",
+    textAlign: "center",
+    marginBottom: "20px"
+  }}
+>
+  <div className="container">
+    <h2
+      style={{
+        fontSize: "2.6rem",
+        fontWeight: "700",
+        marginBottom: "20px",
+      }}
+    >
+      Ready to Make a Difference?
+    </h2>
+
+    <p
+      style={{
+        maxWidth: "700px",
+        margin: "0 auto 35px",
+        fontSize: "1.1rem",
+        lineHeight: "1.8",
+      }}
+    >
+      Join MealLink today and help reduce food waste while bringing smiles to
+      children in need.
+    </p>
+
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        gap: "20px",
+        flexWrap: "wrap",
+      }}
+    >
+      {/* Register Button */}
+      <Link
+        to="/register"
+        className="btn"
+        style={{
+          background: "white",
+          color: "var(--primary-dark)",
+          border: "none",
+          padding: "12px 30px",
+          borderRadius: "8px",
+          fontWeight: "600",
+          transition: "all 0.3s ease",
+        }}
+      >
+        Register
+      </Link>
+
+      {/* Donate Button */}
+      <Link
+  to="/donate"
+  className="btn btn-outline"
+  style={{
+    color: "#fff",
+    border: "2px solid #fff",
+    background: "transparent",
+  }}
+>
+  Donate Now
+</Link>
+    </div>
+  </div>
+</section>
+
+</div>
   );
 }
