@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login Test Helper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        .error {
+            color: #d32f2f;
+        }
+
+        .success {
+            color: #2e7d32;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 Login Test Helper</h1>
+
+    <div class="card">
+        <h2>Step 1: View All Users</h2>
+        <button onclick="viewUsers()">Show All Users</button>
+        <pre id="users-output"></pre>
+    </div>
+
+    <div class="card">
+        <h2>Step 2: Test Login Manually</h2>
+        <label>Email:</label>
+        <input type="text" id="test-email" placeholder="test@orphanage.com">
+        <label>Password:</label>
+        <input type="password" id="test-password" placeholder="password123">
+        <label>Role:</label>
+        <select id="test-role">
+            <option value="donor">Donor</option>
+            <option value="orphanage">Orphanage</option>
+            <option value="admin">Admin</option>
+        </select>
+        <br><br>
+        <button onclick="testLogin()">Test Login</button>
+        <pre id="login-output"></pre>
+    </div>
+
+    <div class="card">
+        <h2>Step 3: Add Test User</h2>
+        <button onclick="addTestUser()">Add Test Orphanage User</button>
+        <pre id="add-output"></pre>
+    </div>
+
+    <div class="card">
+        <h2>Step 4: Clear Data</h2>
+        <button onclick="clearUsers()" style="background: #d32f2f;">Clear All Users (Keep Admin)</button>
+        <button onclick="clearAll()" style="background: #ff5722;">Clear Everything</button>
+    </div>
+
+    <script>
+        function viewUsers() {
+            const users = JSON.parse(localStorage.getItem('meallink_users') || '[]');
+            const output = document.getElementById('users-output');
+
+            if (users.length === 0) {
+                output.innerHTML = '<span class="error">No users found in localStorage</span>';
+                return;
+            }
+
+            let html = `<span class="success">Found ${users.length} users:</span>\n\n`;
+            users.forEach((user, index) => {
+                html += `User ${index + 1}:\n`;
+                html += `  ID: ${user.id}\n`;
+                html += `  Name: ${user.name || user.username}\n`;
+                html += `  Email: ${user.email || 'N/A'}\n`;
+                html += `  Role: ${user.role}\n`;
+                html += `  Password: "${user.password}"\n`;
+                html += `  Phone: ${user.phone || 'N/A'}\n`;
+                if (user.address) html += `  Address: ${user.address}\n`;
+                if (user.aadhar_number) html += `  Aadhar: ${user.aadhar_number}\n`;
+                html += '\n';
+            });
+
+            output.innerHTML = html;
+        }
+
+        function testLogin() {
+            const email = document.getElementById('test-email').value;
+            const password = document.getElementById('test-password').value;
+            const role = document.getElementById('test-role').value;
+            const output = document.getElementById('login-output');
+
+            if (!email || !password) {
+                output.innerHTML = '<span class="error">Please enter email and password</span>';
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('meallink_users') || '[]');
+
+            let html = `Testing login for:\n`;
+            html += `  Email: "${email}"\n`;
+            html += `  Password: "${password}"\n`;
+            html += `  Role: "${role}"\n\n`;
+
+            // Find user by email
+            const userByEmail = users.find(u => u.email === email);
+
+            if (!userByEmail) {
+                html += '<span class="error">❌ No user found with this email</span>\n';
+                html += `\nAvailable emails:\n`;
+                users.forEach(u => {
+                    if (u.email) html += `  - ${u.email} (${u.role})\n`;
+                });
+            } else {
+                html += `<span class="success">✅ User found!</span>\n`;
+                html += `  Stored password: "${userByEmail.password}"\n`;
+                html += `  Entered password: "${password}"\n`;
+                html += `  User role: "${userByEmail.role}"\n`;
+                html += `  Expected role: "${role}"\n\n`;
+
+                if (userByEmail.password === password) {
+                    html += '<span class="success">✅ Password matches!</span>\n';
+                } else {
+                    html += '<span class="error">❌ Password does NOT match!</span>\n';
+                    html += `  Length difference: stored=${userByEmail.password.length}, entered=${password.length}\n`;
+                }
+
+                if (userByEmail.role === role) {
+                    html += '<span class="success">✅ Role matches!</span>\n';
+                } else {
+                    html += '<span class="error">❌ Role does NOT match!</span>\n';
+                }
+
+                // Final verdict
+                if (userByEmail.password === password && userByEmail.role === role) {
+                    html += '\n<span class="success">🎉 LOGIN SHOULD WORK!</span>';
+                } else {
+                    html += '\n<span class="error">❌ LOGIN WILL FAIL</span>';
+                }
+            }
+
+            output.innerHTML = html;
+        }
+
+        function addTestUser() {
+            const users = JSON.parse(localStorage.getItem('meallink_users') || '[]');
+            const output = document.getElementById('add-output');
+
+            // Check if test user already exists
+            if (users.find(u => u.email === 'test@orphanage.com')) {
+                output.innerHTML = '<span class="error">Test user already exists! Clear users first.</span>';
+                return;
+            }
+
+            const testUser = {
+                id: Date.now(),
+                name: "Test Orphanage",
+                email: "test@orphanage.com",
+                phone: "1234567890",
+                password: "password123",
+                address: "123 Test Street",
+                role: "orphanage"
+            };
+
+            users.push(testUser);
+            localStorage.setItem('meallink_users', JSON.stringify(users));
+
+            output.innerHTML = `<span class="success">✅ Test user added!</span>\n\nCredentials:\n  Email: test@orphanage.com\n  Password: password123\n  Role: orphanage`;
+        }
+
+        function clearUsers() {
+            const users = JSON.parse(localStorage.getItem('meallink_users') || '[]');
+            const admin = users.find(u => u.role === 'admin');
+
+            if (admin) {
+                localStorage.setItem('meallink_users', JSON.stringify([admin]));
+                alert('✅ All users cleared except admin!');
+            } else {
+                localStorage.setItem('meallink_users', JSON.stringify([]));
+                alert('✅ All users cleared!');
+            }
+
+            viewUsers();
+        }
+
+        function clearAll() {
+            if (confirm('Are you sure? This will clear ALL data!')) {
+                localStorage.clear();
+                alert('✅ All data cleared!');
+                location.reload();
+            }
+        }
+
+        // Auto-load users on page load
+        window.onload = viewUsers;
+    </script>
+</body>
+
+</html>
