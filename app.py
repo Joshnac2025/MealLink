@@ -5,6 +5,7 @@ from flask_babel import Babel, gettext as _
 from config import db
 import os
 from dotenv import load_dotenv
+from urllib.parse import quote_plus
 
 # import your blueprints as before
 from routes.donor_routes import donor_bp
@@ -28,7 +29,11 @@ MYSQL_USER = os.getenv('MYSQL_USER', 'root')
 MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', '')
 MYSQL_DB = os.getenv('MYSQL_DB', 'meallink')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:3306/{MYSQL_DB}"
+encoded_password = quote_plus(MYSQL_PASSWORD)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    f"mysql+pymysql://{MYSQL_USER}:{encoded_password}@{MYSQL_HOST}:3306/{MYSQL_DB}"
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5173", "http://127.0.0.1:5173"]}})

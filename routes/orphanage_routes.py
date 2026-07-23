@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from config import db
 from sqlalchemy import text
-from services.donation_accept_service import accept_donation
+from services.donation_accept_service import accept_donation as accept_donation_service
 
 orphanage_bp = Blueprint('orphanage_bp', __name__)
 
@@ -61,7 +61,7 @@ def orphanage_login():
 @orphanage_bp.route('/orphanage/view_donations', methods=['GET'])
 def view_donations():
     with db.engine.connect() as connection:
-        result = connection.execute(text("SELECT id, donor_email, donation_type, quantity, description, quality_info, location, status FROM donations WHERE status = 'Pending'"))
+        result = connection.execute(text("SELECT id, donor_email, donation_type, quantity, description, quality_info, location, status FROM donations WHERE status = 'Submitted'"))
         donations = result.fetchall()
 
         if not donations:
@@ -83,7 +83,12 @@ def view_donations():
     return jsonify({"donations": donation_list}), 200
 
 @orphanage_bp.route('/orphanage/accept_donation', methods=['POST'])
-def accept_donation():
+def accept_donation(donation_id):
+
+    print("=== ACCEPT ROUTE HIT ===")
+    print("Donation ID:", donation_id)
+    print("Request Data:", request.get_json())
+
     data = request.get_json()
     donation_id = data.get('donation_id')
     orphanage_email = data.get('orphanage_email')
@@ -116,7 +121,7 @@ def accept_donation_route(donation_id):
             "error": "orphanage_id is required"
         }), 400
 
-    response, status = accept_donation(
+    response, status = accept_donation_service(
         donation_id,
         orphanage_id
     )

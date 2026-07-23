@@ -33,6 +33,8 @@ def accept_donation(donation_id, orphanage_id):
             return {"error": "Orphanage not found"}, 404
 
         # Already accepted?
+        print("Donation status from DB:", donation.status)
+
         if donation.status != "Submitted":
             return {
                 "error": "Donation already accepted or completed"
