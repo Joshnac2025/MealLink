@@ -67,5 +67,6 @@ def home():
     return _("Welcome to MealLink! Making kindness accessible for everyone")
 
 if __name__ == '__main__':
+    print(app.url_map)
     print("MealLink backend is running at http://127.0.0.1:5000")
     app.run(debug=True)

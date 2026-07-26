@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash
 from config import db
 from sqlalchemy import text
 from services.donation_service import create_donation
+from services.view_donor_donations_service import get_donor_donations
 import random
 
 donor_bp = Blueprint('donor_bp', __name__)
@@ -86,4 +87,11 @@ def add_donation():
         )
         connection.commit()
 
-    return jsonify({"message": "Donation added successfully ✅"}), 201
+    return jsonify({"message": "Donation added successfully ✅"}),201
+
+@donor_bp.route('/my-donations/<int:donor_id>', methods=['GET'])
+def view_my_donations(donor_id):
+
+    response, status = get_donor_donations(donor_id)
+
+    return jsonify(response), status

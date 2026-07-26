@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from werkzeug.security import check_password_hash
 from config import db
 from sqlalchemy import text
+from services.ai_recommendation_service import recommend_orphanage
 
 admin_bp = Blueprint('admin_bp', __name__)
 
@@ -42,3 +43,10 @@ def admin_login():
             return jsonify({"message": "Admin login successful ✅"}), 200
         else:
             return jsonify({"error": "Invalid credentials ❌"}), 401
+
+@admin_bp.route("/recommend/<int:donation_id>", methods=["GET"])
+def recommend(donation_id):
+
+    response, status = recommend_orphanage(donation_id)
+
+    return jsonify(response), status

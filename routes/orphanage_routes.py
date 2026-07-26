@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from config import db
 from sqlalchemy import text
 from services.donation_accept_service import accept_donation as accept_donation_service
+from services.mark_delivered_service import mark_delivered
 
 orphanage_bp = Blueprint('orphanage_bp', __name__)
 
@@ -122,6 +123,25 @@ def accept_donation_route(donation_id):
         }), 400
 
     response, status = accept_donation_service(
+        donation_id,
+        orphanage_id
+    )
+
+    return jsonify(response), status
+
+@orphanage_bp.route('/donation/<int:donation_id>/deliver', methods=['PUT'])
+def deliver_donation(donation_id):
+
+    data = request.get_json()
+
+    orphanage_id = data.get("orphanage_id")
+
+    if not orphanage_id:
+        return jsonify({
+            "error": "orphanage_id is required"
+        }), 400
+
+    response, status = mark_delivered(
         donation_id,
         orphanage_id
     )
