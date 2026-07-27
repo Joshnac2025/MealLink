@@ -14,6 +14,7 @@ import Contact from "./pages/Contact";
 import CommunityDashboard from "./pages/CommunityDashboard";
 import CampaignDetails from "./pages/CampaignDetails";
 import Contribute from "./pages/Contribute";
+import AIRecommendation from "./pages/AIRecommendation";
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/community" element={<CommunityDashboard />} />
           <Route path="/campaign/:id" element={<CampaignDetails />} />
           <Route path="/contribute" element={<Contribute />} />
+          <Route path="/ai-recommendation/:donationId"element={<AIRecommendation />}/>
         </Routes>
       </main>
       <Footer />
