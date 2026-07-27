@@ -9,6 +9,7 @@ def find_best_orphanage(orphanages, donation_type, prepared_time, quantity):
     best = None
     best_score = -1
     best_reasons = []
+    recommendations = []
 
     for orphanage in orphanages:
 
@@ -35,12 +36,55 @@ def find_best_orphanage(orphanages, donation_type, prepared_time, quantity):
             best = orphanage
             best_reasons = reasons
 
+        recommendations.append({
+            "orphanage": orphanage,
+            "score": score,
+            "reasons": reasons
+})
+
     explanation = build_explanation(best[1], best_reasons)
     confidence = calculate_confidence(best_score)
 
     meal_coverage = calculate_meal_coverage(
-    quantity,
-    best[2]   # children_count
-)
+        quantity,
+        best[2]
+    )
 
-    return best, best_score, best_reasons, explanation, confidence, meal_coverage
+    recommendations.sort(
+        key=lambda x: x["score"],
+        reverse=True
+    )
+
+    top3 = recommendations[:3]
+
+    for rec in top3:
+
+        rec["confidence"] = calculate_confidence(
+            rec["score"]
+        )
+
+        rec["explanation"] = build_explanation(
+            rec["orphanage"][1],
+            rec["reasons"]
+        )
+
+        rec["meal_coverage"] = calculate_meal_coverage(
+            quantity,
+            rec["orphanage"][2]
+        )
+
+        print("Recommendations:", len(recommendations))
+        print("Top3:", len(top3))
+
+    for rec in top3:
+        print(rec["orphanage"][1], rec["score"])
+
+    return (
+        best,
+        best_score,
+        best_reasons,
+        explanation,
+        confidence,
+        meal_coverage,
+        top3
+    )

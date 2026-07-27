@@ -3,64 +3,83 @@ from config import db
 
 
 def create_donation(data):
-    donor_email = data.get('email')
-    donation_type = data.get('donation_type')
-    quantity = data.get('quantity')
-    description = data.get('description')
-    quality_info = data.get('quality_info')
-    location = data.get('location')
+
+    donor_email = data.get("email")
+    donation_type = data.get("donation_type")
+    quantity = data.get("quantity")
+    description = data.get("description")
+    quality_info = data.get("quality_info")
+    location = data.get("location")
+    prepared_time = data.get("prepared_time")
+    hygiene_confirmed = data.get("hygiene_confirmed")
 
     if not all([donor_email, donation_type, location]):
-        return {"error": "Email, donation type, and location are required"}, 400
+        return {
+            "error": "Email, donation type and location are required"
+        }, 400
 
     with db.engine.connect() as connection:
 
-        result = connection.execute(
+        donor = connection.execute(
             text("""
-                SELECT *
+                SELECT id
                 FROM donors
                 WHERE email=:email
                 AND is_verified=TRUE
             """),
             {"email": donor_email}
-        )
-
-        donor = result.fetchone()
+        ).fetchone()
 
         if not donor:
-            return {"error": "Donor not found or not verified"}, 404
+            return {
+                "error": "Donor not found"
+            }, 404
 
-        connection.execute(
+        result = connection.execute(
             text("""
                 INSERT INTO donations
                 (
-                    donor_email,
+                    donor_id,
                     donation_type,
+                    item_description,
                     quantity,
-                    description,
-                    quality_info,
-                    location
+                    item_condition,
+                    prepared_time,
+                    hygiene_confirmed,
+                    pickup_location,
+                    status
                 )
+
                 VALUES
                 (
-                    :donor_email,
+                    :donor_id,
                     :donation_type,
-                    :quantity,
                     :description,
+                    :quantity,
                     :quality_info,
-                    :location
+                    :prepared_time,
+                    :hygiene_confirmed,
+                    :location,
+                    'Awaiting AI Recommendation'
                 )
             """),
             {
-                "donor_email": donor_email,
+                "donor_id": donor.id,
                 "donation_type": donation_type,
-                "quantity": quantity,
                 "description": description,
+                "quantity": quantity,
                 "quality_info": quality_info,
+                "prepared_time": prepared_time,
+                "hygiene_confirmed": hygiene_confirmed,
                 "location": location
             }
         )
 
+        donation_id = result.lastrowid
+
         connection.commit()
 
-    return {"message": "Donation added successfully ✅"}, 201
+    return {
+        "message": "Donation submitted successfully",
+        "donation_id": donation_id
+    }, 201

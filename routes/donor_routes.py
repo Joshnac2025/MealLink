@@ -4,6 +4,7 @@ from config import db
 from sqlalchemy import text
 from services.donation_service import create_donation
 from services.view_donor_donations_service import get_donor_donations
+from services.donation_approval_service import approve_donation
 import random
 
 donor_bp = Blueprint('donor_bp', __name__)
@@ -93,5 +94,12 @@ def add_donation():
 def view_my_donations(donor_id):
 
     response, status = get_donor_donations(donor_id)
+
+    return jsonify(response), status
+
+@donor_bp.route("/donation/<int:donation_id>/approve", methods=["PUT"])
+def approve(donation_id):
+
+    response, status = approve_donation(donation_id)
 
     return jsonify(response), status

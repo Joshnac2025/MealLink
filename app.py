@@ -13,6 +13,7 @@ from routes.orphanage_routes import orphanage_bp
 from routes.admin_routes import admin_bp
 from routes.admin_dashboard_routes import admin_dashboard_bp
 from routes.event_donation_routes import event_bp
+from routes.recommend_routes import recommend_bp
 
 app = Flask(__name__)
 
@@ -55,6 +56,7 @@ app.register_blueprint(orphanage_bp, url_prefix='/api/orphanages')
 app.register_blueprint(admin_bp, url_prefix='/api/admin')
 app.register_blueprint(admin_dashboard_bp, url_prefix='/api/admin-dashboard')
 app.register_blueprint(event_bp, url_prefix='/api/events')
+app.register_blueprint(recommend_bp, url_prefix="/api/")
 
 @app.route('/api/')
 def hello_api():
