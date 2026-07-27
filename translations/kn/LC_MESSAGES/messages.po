@@ -1,0 +1,12 @@
+# Kannada translations for MealLink Project
+msgid ""
+msgstr ""
+"Project-Id-Version: MealLink\n"
+"Language: kn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: app.py:32
+msgid "Welcome to MealLink! Making kindness accessible for everyone"
+msgstr "ಮೀಲ್‌ಲಿಂಕ್‌ಗೆ ಸ್ವಾಗತ! ಪ್ರತಿಯೊಬ್ಬರಿಗೂ ದಯೆಯನ್ನು ಸುಲಭವಾಗಿ ಲಭ್ಯವಾಗುವಂತೆ ಮಾಡುತ್ತಿದ್ದೇವೆ"
