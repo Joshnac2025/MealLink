@@ -3,8 +3,9 @@ from config import db
 
 
 def create_donation(data):
+    print("New Donation Service Called", data)
 
-    donor_email = data.get("email")
+    donor_id = data.get("donor_id")
     donation_type = data.get("donation_type")
     quantity = data.get("quantity")
     description = data.get("description")
@@ -13,9 +14,9 @@ def create_donation(data):
     prepared_time = data.get("prepared_time")
     hygiene_confirmed = data.get("hygiene_confirmed")
 
-    if not all([donor_email, donation_type, location]):
+    if not all([donor_id, donation_type, location]):
         return {
-            "error": "Email, donation type and location are required"
+            "error": "Donor ID, donation type and location are required"
         }, 400
 
     with db.engine.connect() as connection:
@@ -24,10 +25,10 @@ def create_donation(data):
             text("""
                 SELECT id
                 FROM donors
-                WHERE email=:email
+                WHERE id=:id
                 AND is_verified=TRUE
             """),
-            {"email": donor_email}
+            {"id": donor_id}
         ).fetchone()
 
         if not donor:
@@ -46,7 +47,7 @@ def create_donation(data):
                     item_condition,
                     prepared_time,
                     hygiene_confirmed,
-                    pickup_location,
+                    location,
                     status
                 )
 
