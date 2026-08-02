@@ -32,14 +32,13 @@ export default function AdminDashboard() {
             setPendingEvents(eventsRes.data);
 
             // Get users directly from localStorage
-            const allUsers = JSON.parse(localStorage.getItem('meallink_users') || '[]');
-            console.log('All registered users:', allUsers);
-            setUsers(allUsers);
+            const usersRes = await api.get('/admin-dashboard/admin/donors');
+            setUsers(usersRes.data);
 
-            // Get donations directly from localStorage
-            const allDonations = JSON.parse(localStorage.getItem('meallink_donations') || '[]');
-            console.log('All donations:', allDonations);
-            setDonations(allDonations);
+            // Fetch donations from backend
+            const donationsRes = await api.get('/admin-dashboard/admin/donations');
+            console.log('All donations:', donationsRes.data);
+            setDonations(donationsRes.data);
 
         } catch (err) {
             console.error('Error fetching data:', err);
@@ -241,6 +240,9 @@ export default function AdminDashboard() {
                                             </p>
                                             <p style={{ fontSize: '0.9rem', marginTop: '5px' }}>
                                                 📍 {donation.location}
+                                            </p>
+                                            <p style={{ fontSize: '0.9rem', marginTop: '5px', fontWeight: '600', color: '#2E7D32' }}>
+                                            🤖 Recommended: {donation.recommended_orphanage || 'Not Assigned'}
                                             </p>
                                             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '5px' }}>
                                                 From: {donation.email}
