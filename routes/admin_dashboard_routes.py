@@ -26,8 +26,28 @@ def get_all_orphanages():
 @admin_dashboard_bp.route('/admin/donations', methods=['GET'])
 def get_all_donations():
     with db.engine.connect() as connection:
-        result = connection.execute(text("SELECT id, donor_id, donation_type, item_description, quantity, item_condition, prepared_time, hygiene_confirmed, status, created_at FROM donations"))
+        result = connection.execute(text('''
+            SELECT
+                d.id,
+                d.donor_id,
+                d.donation_type,
+                d.item_description,
+                d.quantity,
+                d.item_condition,
+                d.prepared_time,
+                d.hygiene_confirmed,
+                d.status,
+                d.created_at,
+                d.location,
+                o.name AS recommended_orphanage
+            FROM donations d
+            LEFT JOIN orphanages o
+                ON d.recommended_orphanage_id = o.id
+            ORDER BY d.id DESC
+        '''))
+
         donations = [dict(row) for row in result.mappings()]
+
     return jsonify(donations), 200
 
 
