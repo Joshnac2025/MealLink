@@ -3,8 +3,74 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-
 export default function Contribute() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const [formData, setFormData] = useState({
+  donor_id: 2,
+  donation_type: "",
+  quantity: "",
+  prepared_time: "",
+  pickup_address: "",
+  notes: "",
+  item_description: "Rice and cooked meals",
+  item_condition: "Good",
+  hygiene_confirmed: true,
+});
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+
+      const payload = {
+        donor_id: formData.donor_id,
+        donation_type: formData.donation_type,
+        quantity: formData.quantity,
+        location: formData.pickup_address,
+        description: formData.notes,
+        quality_info: formData.item_condition,
+        prepared_time: formData.prepared_time
+          ? `${formData.prepared_time} 18:00:00`
+          : null,
+      };
+      const response = await axios.post(
+        "http://127.0.0.1:5000/api/donors/donor/add_donation",
+        payload
+      );
+
+      const donationId = response.data.donation_id;
+
+      const aiResponse = await fetch(
+        `http://127.0.0.1:5000/api/recommend/${donationId}`,
+        { method: "POST" }
+      );
+
+      const aiData = await aiResponse.json();
+
+      navigate(`/ai-recommendation/${donationId}`, { state: aiData,
+});
+    
+    } catch (err) {
+  console.log("FULL ERROR:", err);
+
+  if (err.response) {
+    console.log("BACKEND RESPONSE:", err.response.data);
+    alert(JSON.stringify(err.response.data));
+  } else {
+    alert(err.message);
+  }
+} finally {
+  setLoading(false);
+}
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  
   return (
     <div>
 
@@ -231,7 +297,11 @@ export default function Contribute() {
         type="email"
         placeholder="Email Address"
         className="form-input"
-      />
+        value={formData.email}
+        onChange={(e) =>
+          setFormData({ ...formData, email: e.target.value })
+        }
+/>
 
       <input
         type="tel"
@@ -258,45 +328,81 @@ export default function Contribute() {
         gap: "20px",
       }}
     >
-      <select className="form-input">
-        <option>Select Contribution Type</option>
-        <option>Food Supplies</option>
-        <option>Books</option>
-        <option>Clothing</option>
-        <option>Hygiene Kits</option>
-      </select>
+      <select
+        className="form-input"
+        value={formData.donation_type}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            donation_type: e.target.value,
+    })
+  }
+>
+  <option value="">Select Contribution Type</option>
+  <option value="Food Supplies">Food Supplies</option>
+  <option value="Books">Books</option>
+  <option value="Clothing">Clothing</option>
+  <option value="Hygiene Kits">Hygiene Kits</option>
+</select>
 
       <input
         type="number"
-        placeholder="Number of Items"
         className="form-input"
-      />
-
+        value={formData.quantity}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            quantity: e.target.value,
+    })
+  }
+/>
+      
       <input
         type="date"
         className="form-input"
-      />
+        value={formData.prepared_time}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            prepared_time: e.target.value,
+    })
+  }
+/>
     </div>
 
     <textarea
       placeholder="Pickup Address"
       className="form-input"
       rows="4"
+      value={formData.pickup_address}
+      onChange={(e) =>
+        setFormData({
+          ...formData,
+          pickup_address: e.target.value,
+        })
+      }
       style={{
         marginTop: "20px",
         width: "100%",
-      }}
-    />
+  }}
+/>
 
     <textarea
       placeholder="Additional Notes (Optional)"
       className="form-input"
       rows="4"
+      value={formData.notes}
+      onChange={(e) =>
+        setFormData({
+          ...formData,
+          notes: e.target.value,
+        })
+      }
       style={{
         marginTop: "20px",
         width: "100%",
-      }}
-    />
+  }}
+/>
 
     <div
       style={{
@@ -304,9 +410,15 @@ export default function Contribute() {
         marginTop: "35px",
       }}
     >
-      <button className="btn btn-primary">
-        Submit Contribution
-      </button>
+     
+     <button
+  className="btn btn-primary"
+  disabled={loading}
+  onClick={handleSubmit}
+>
+  {loading ? "Getting AI Recommendation..." : "Submit Contribution"}
+</button>
+
     </div>
   </div>
 </section>
